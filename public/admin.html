@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin · Pesquisa Fortaleza 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#151614;--surface:#1a1b18;--border:#3a3a38;
+  --text:#F0EFE8;--muted:#9a9790;--accent:#C8F560;--danger:#E05555;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* ── login ── */
+#login{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.login-box{width:100%;max-width:380px;}
+.login-box h1{font-family:'Sora',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:6px;}
+.login-box p{color:var(--muted);font-size:.9rem;margin-bottom:28px;}
+.lbl{display:block;font-size:.7rem;font-weight:500;color:var(--muted);margin-bottom:7px;text-transform:uppercase;letter-spacing:.08em;}
+input[type=text],input[type=password]{width:100%;padding:14px 18px;border:1px solid var(--border);border-radius:12px;font-size:1rem;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);outline:none;transition:border-color .2s;}
+input:focus{border-color:var(--accent);}
+input.err{border-color:var(--danger);}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;margin-top:16px;background:var(--accent);color:#0E0F0D;border:none;border-radius:12px;font-family:'Sora',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:opacity .2s;}
+.btn:hover{opacity:.88;}
+.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--muted);margin-top:10px;}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent);}
+.errmsg{font-size:.78rem;color:var(--danger);margin-top:8px;display:none;}
+.errmsg.on{display:block;}
+
+/* ── dashboard ── */
+#dash{display:none;flex-direction:column;min-height:100vh;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(21,22,20,.95);backdrop-filter:blur(12px);z-index:10;flex-wrap:wrap;gap:10px;}
+@media(max-width:600px){.topbar{padding:14px 20px;}}
+.topbar-left{display:flex;align-items:center;gap:14px;}
+.badge{font-family:'Sora',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:rgba(200,245,96,.12);color:var(--accent);border:1px solid rgba(200,245,96,.25);border-radius:99px;padding:4px 12px;}
+.topbar h1{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;}
+.topbar-right{display:flex;gap:10px;}
+.btn-sm{padding:8px 18px;border-radius:99px;font-family:'Sora',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;border:none;transition:opacity .2s;}
+.btn-sm.ac{background:var(--accent);color:#0E0F0D;}
+.btn-sm.ac:hover{opacity:.85;}
+.btn-sm.bd{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.btn-sm.bd:hover{border-color:var(--accent);color:var(--accent);}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border);}
+@media(max-width:800px){.stats-row{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:440px){.stats-row{grid-template-columns:1fr;}}
+.stat-card{padding:24px 32px;border-right:1px solid var(--border);}
+.stat-card:last-child{border-right:none;}
+@media(max-width:800px){.stat-card:nth-child(2n){border-right:none;}.stat-card{border-bottom:1px solid var(--border);}}
+.stat-lbl{font-size:.68rem;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;}
+.stat-val{font-family:'Sora',sans-serif;font-size:2rem;font-weight:800;color:var(--accent);}
+.stat-sub{font-size:.75rem;color:var(--muted);margin-top:4px;}
+
+.content{padding:32px 40px;}
+@media(max-width:600px){.content{padding:20px;}}
+
+.section-title{font-family:'Sora',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* filtros */
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px;}
+.filter-inp{padding:10px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.87rem;outline:none;transition:border-color .2s;}
+.filter-inp:focus{border-color:var(--accent);}
+select.filter-inp option{background:var(--surface);}
+
+/* tabela */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:14px;}
+table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:900px;}
+thead th{padding:12px 16px;text-align:left;font-family:'Sora',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);background:var(--surface);white-space:nowrap;}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:rgba(200,245,96,.03);}
+tbody td{padding:13px 16px;vertical-align:middle;}
+.td-nome{font-weight:500;}
+.td-ais{font-family:'Sora',sans-serif;font-size:.75rem;font-weight:700;color:var(--accent);}
+.td-ts{color:var(--muted);font-size:.78rem;white-space:nowrap;}
+.empty{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty strong{display:block;color:var(--text);font-family:'Sora',sans-serif;font-size:1rem;margin-bottom:6px;}
+
+/* modal detalhe */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;display:none;}
+.overlay.on{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;}
+.modal h2{font-family:'Sora',sans-serif;font-size:1.2rem;font-weight:800;margin-bottom:20px;}
+.detail-row{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);gap:16px;}
+.detail-row:last-child{border-bottom:none;}
+.detail-lbl{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);flex-shrink:0;}
+.detail-val{font-size:.9rem;font-weight:500;text-align:right;}
+.modal-close{display:flex;align-items:center;justify-content:center;width:100%;margin-top:20px;padding:12px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:'Sora',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:border-color .2s,color .2s;}
+.modal-close:hover{border-color:var(--accent);color:var(--accent);}
+
+.tag{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.72rem;font-weight:600;}
+.tag.q1-5,.tag.q1-4{background:rgba(200,245,96,.12);color:var(--accent);}
+.tag.q1-3{background:rgba(255,200,0,.1);color:#F2C811;}
+.tag.q1-2,.tag.q1-1{background:rgba(224,85,85,.12);color:var(--danger);}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="login">
+  <div class="login-box">
+    <h1>Painel Admin</h1>
+    <p>Pesquisa Segurança · Fortaleza 2026</p>
+    <label class="lbl" for="inp-user">Usuário</label>
+    <input type="text" id="inp-user" placeholder="usuário" style="margin-bottom:14px;" onkeydown="if(event.key==='Enter')entrar()"/>
+    <label class="lbl" for="inp-senha">Senha</label>
+    <input type="password" id="inp-senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')entrar()"/>
+    <div class="errmsg" id="login-err">Usuário ou senha incorretos. Tente novamente.</div>
+    <button class="btn" onclick="entrar()">Entrar</button>
+    <button class="btn ghost" onclick="location.href='/'">← Voltar ao site</button>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ── -->
+<div id="dash">
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="badge">Admin</span>
+      <h1>Respostas coletadas</h1>
+    </div>
+    <div class="topbar-right">
+      <button class="btn-sm ac" onclick="baixarCSV()">⬇ Baixar CSV</button>
+      <button class="btn-sm bd" onclick="sair()">Sair</button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-lbl">Total de respostas</div>
+      <div class="stat-val" id="st-total">0</div>
+      <div class="stat-sub">participantes</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">AIS mais citada</div>
+      <div class="stat-val" id="st-ais">—</div>
+      <div class="stat-sub" id="st-ais-sub">bairro</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">Sensação predominante</div>
+      <div class="stat-val" style="font-size:1.1rem;line-height:1.3;" id="st-seg">—</div>
+      <div class="stat-sub">resposta mais frequente</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">Principal preocupação</div>
+      <div class="stat-val" style="font-size:1rem;line-height:1.3;" id="st-crime">—</div>
+      <div class="stat-sub">crime mais apontado</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section-title">Filtros</div>
+    <div class="filters">
+      <input class="filter-inp" id="f-nome" placeholder="Buscar por nome ou e-mail…" oninput="renderTabela()"/>
+      <select class="filter-inp" id="f-ais" onchange="renderTabela()">
+        <option value="">Todas as AIS</option>
+      </select>
+      <select class="filter-inp" id="f-seg" onchange="renderTabela()">
+        <option value="">Qualquer sensação</option>
+        <option>Muito seguro</option>
+        <option>Relativamente seguro</option>
+        <option>Indiferente</option>
+        <option>Inseguro</option>
+        <option>Muito inseguro</option>
+      </select>
+    </div>
+
+    <div class="section-title">Respostas individuais</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Data/Hora</th>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Bairro</th>
+            <th>AIS</th>
+            <th>Sensação</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL DETALHE ── -->
+<div class="overlay" id="overlay" onclick="fecharModal(event)">
+  <div class="modal" id="modal">
+    <h2 id="modal-nome">Detalhe</h2>
+    <div id="modal-body"></div>
+    <button class="modal-close" onclick="fecharModal()">Fechar</button>
+  </div>
+</div>
+
+<script>
+let SENHA   = '';
+let DADOS   = [];
+let FILTRADO = [];
+
+const Q_LABELS = {
+  q1_seguranca:         'Sensação de segurança',
+  q2_evita_circular:    'Evita circular por medo',
+  q3_crime_preocupante: 'Crime mais preocupante',
+  q4_atuacao_policial:  'Atuação policial',
+  q5_foi_vitima:        'Foi vítima ou presenciou',
+  q6_fator_inseguranca: 'Principal fator de insegurança',
+};
+
+const USUARIO_CORRETO = 'projetosistemasaps';
+
+function entrar() {
+  const user  = document.getElementById('inp-user').value.trim();
+  const senha = document.getElementById('inp-senha').value;
+  if (!user || !senha) return;
+  if (user !== USUARIO_CORRETO) {
+    document.getElementById('login-err').classList.add('on');
+    document.getElementById('inp-user').classList.add('err');
+    return;
+  }
+  SENHA = senha;
+  carregarDados();
+}
+
+async function carregarDados() {
+  try {
+    const res = await fetch(`/api/respostas?senha=${encodeURIComponent(SENHA)}`);
+    if (res.status === 401) {
+      document.getElementById('login-err').classList.add('on');
+      document.getElementById('inp-senha').classList.add('err');
+      return;
+    }
+    DADOS = await res.json();
+    document.getElementById('login').style.display   = 'none';
+    document.getElementById('dash').style.display    = 'flex';
+    preencherFiltroAIS();
+    calcularStats();
+    renderTabela();
+  } catch(e) {
+    alert('Erro ao conectar ao servidor.');
+  }
+}
+
+function sair() {
+  SENHA = ''; DADOS = [];
+  document.getElementById('login').style.display = 'flex';
+  document.getElementById('dash').style.display  = 'none';
+  document.getElementById('inp-senha').value     = '';
+}
+
+function preencherFiltroAIS() {
+  const aisSet = [...new Set(DADOS.map(d => d.ais).filter(Boolean))].sort();
+  const sel = document.getElementById('f-ais');
+  sel.innerHTML = '<option value="">Todas as AIS</option>';
+  aisSet.forEach(a => { sel.innerHTML += `<option>${a}</option>`; });
+}
+
+function calcularStats() {
+  document.getElementById('st-total').textContent = DADOS.length;
+
+  const contAIS = {};
+  const contSeg = {};
+  const contCrime = {};
+  for (const d of DADOS) {
+    if (d.ais)                  contAIS[d.ais]   = (contAIS[d.ais]||0)+1;
+    if (d.q1_seguranca)         contSeg[d.q1_seguranca]  = (contSeg[d.q1_seguranca]||0)+1;
+    if (d.q3_crime_preocupante) contCrime[d.q3_crime_preocupante] = (contCrime[d.q3_crime_preocupante]||0)+1;
+  }
+
+  const topAIS   = Object.entries(contAIS).sort((a,b)=>b[1]-a[1])[0];
+  const topSeg   = Object.entries(contSeg).sort((a,b)=>b[1]-a[1])[0];
+  const topCrime = Object.entries(contCrime).sort((a,b)=>b[1]-a[1])[0];
+
+  if (topAIS)   { document.getElementById('st-ais').textContent     = topAIS[0]; document.getElementById('st-ais-sub').textContent = `${topAIS[1]} respostas`; }
+  if (topSeg)   document.getElementById('st-seg').textContent   = topSeg[0];
+  if (topCrime) document.getElementById('st-crime').textContent = topCrime[0];
+}
+
+function renderTabela() {
+  const fNome = document.getElementById('f-nome').value.toLowerCase();
+  const fAIS  = document.getElementById('f-ais').value;
+  const fSeg  = document.getElementById('f-seg').value;
+
+  FILTRADO = DADOS.filter(d => {
+    if (fNome && !`${d.nome} ${d.email}`.toLowerCase().includes(fNome)) return false;
+    if (fAIS  && d.ais !== fAIS)          return false;
+    if (fSeg  && d.q1_seguranca !== fSeg) return false;
+    return true;
+  });
+
+  const tb = document.getElementById('tbody');
+  if (!FILTRADO.length) {
+    tb.innerHTML = `<tr><td colspan="8" class="empty"><strong>Nenhuma resposta encontrada</strong>Ajuste os filtros acima.</td></tr>`;
+    return;
+  }
+
+  const TAGS = {
+    'Muito seguro':         'q1-5',
+    'Relativamente seguro': 'q1-4',
+    'Indiferente':          'q1-3',
+    'Inseguro':             'q1-2',
+    'Muito inseguro':       'q1-1',
+  };
+
+  tb.innerHTML = FILTRADO.map((d, i) => `
+    <tr>
+      <td class="td-ts">${DADOS.indexOf(d)+1}</td>
+      <td class="td-ts">${d.timestamp || '—'}</td>
+      <td class="td-nome">${d.nome || '—'}</td>
+      <td style="color:var(--muted)">${d.email || '—'}</td>
+      <td>${d.bairro || '—'}</td>
+      <td class="td-ais">${d.ais || '—'}</td>
+      <td><span class="tag ${TAGS[d.q1_seguranca]||''}">${d.q1_seguranca||'—'}</span></td>
+      <td><button onclick="verDetalhe(${DADOS.indexOf(d)})" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:5px 12px;font-size:.75rem;cursor:pointer;font-family:'Sora',sans-serif;font-weight:600;transition:border-color .15s,color .15s;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">Ver</button></td>
+    </tr>`).join('');
+}
+
+function verDetalhe(idx) {
+  const d = DADOS[idx];
+  document.getElementById('modal-nome').textContent = d.nome || 'Participante';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="detail-row"><span class="detail-lbl">Timestamp</span><span class="detail-val">${d.timestamp||'—'}</span></div>
+    <div class="detail-row"><span class="detail-lbl">E-mail</span><span class="detail-val">${d.email||'—'}</span></div>
+    <div class="detail-row"><span class="detail-lbl">Bairro</span><span class="detail-val">${d.bairro||'—'}</span></div>
+    <div class="detail-row"><span class="detail-lbl">AIS</span><span class="detail-val">${d.ais||'—'}</span></div>
+    ${Object.entries(Q_LABELS).map(([k,lbl]) => `
+    <div class="detail-row"><span class="detail-lbl">${lbl}</span><span class="detail-val">${d[k]||'—'}</span></div>`).join('')}
+  `;
+  document.getElementById('overlay').classList.add('on');
+}
+
+function fecharModal(e) {
+  if (!e || e.target === document.getElementById('overlay') || e.target.classList.contains('modal-close')) {
+    document.getElementById('overlay').classList.remove('on');
+  }
+}
+
+async function baixarCSV() {
+  window.location.href = `/api/respostas/csv?senha=${encodeURIComponent(SENHA)}`;
+}
+</script>
+</body>
+</html>
