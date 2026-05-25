@@ -3,13 +3,11 @@ const fs      = require('fs');
 const path    = require('path');
 
 const app  = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 // ── Variáveis de ambiente ─────────────────────────────────────────────────────
-const SENHA_ADMIN = process.env.SENHA_ADMIN || 'gclap2026#';
+const SENHA_ADMIN = process.env.SENHA_ADMIN;
 
-// Railway Volume: monte o volume em /data no painel do Railway.
-// Localmente usa a pasta ./respostas como fallback.
 const PASTA_DADOS = process.env.RAILWAY_VOLUME_MOUNT_PATH
   ? path.join(process.env.RAILWAY_VOLUME_MOUNT_PATH)
   : path.join(__dirname, 'respostas');
