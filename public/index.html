@@ -408,42 +408,147 @@ input.err{border-color:var(--danger);}
 <script>
 // ── Mapeamento bairro → número AIS ───────────────────────────────────────────
 const BAIRRO_AIS = {
-  // AIS 05
-  "aldeota":5,"meireles":5,"de lourdes":5,"varjota":5,"papicu":5,
-  "dionisio torres":5,"joaquim tavora":5,"fatima":5,"benfica":5,
-  "sao gerardo":5,"monte castelo":5,"jacarecanga":5,
-  // AIS 06
-  "montese":6,"damas":6,"parangaba":6,"vila uniao":6,"aerolandia":6,
-  "dias macedo":6,"sao joao do tauape":6,"rink":6,"itaoca":6,"bela vista":6,
-  "parquelândia":6,"presidente kennedy":6,
-  // AIS 08
-  "barra do ceara":8,"vila velha":8,"pirambu":8,"cristo redentor":8,
-  "moura brasil":8,"alvaro weyne":8,"floresta":8,"padre andrade":8,
-  "quintino cunha":8,"dom lustosa":8,"henrique jorge":8,"amadeu furtado":8,
-  "pici":8,"pan americano":8,"genibaú":8,"granja portugal":8,
-  "granja lisboa":8,"araturi":8,"canindezinho":8,"siqueira":8,
-  "conjunto esperanca":8,"maraponga":8,"mondubim":8,
-  // AIS 16
-  "messejana":16,"coaçu":16,"lagoa redonda":16,"curio":16,"guajeru":16,
-  "paupina":16,"barroso":16,"boa vista":16,"passare":16,"jangurussu":16,
-  "conjunto palmeiras":16,"jose de alencar":16,"parque iracema":16,
-  // AIS 17
-  "centro":17,"praia de iracema":17,"farias brito":17,
-  "rodolfo teofilo":17,"antonio bezerra":17,"carlito pamplona":17,
-  // AIS 18
-  "coco":18,"dunas":18,"salinas":18,"edson queiroz":18,"sabiaguaba":18,
-  "praia do futuro":18,"cidade dos funcionarios":18,
-  // AIS 19
-  "cajazeiras":19,"ancuri":19,"pedras":19,"planalto ayrton senna":19,
-  // AIS 20
-  "sapiranga":20,"alto da balanca":20,"castelao":20,"tancredo neves":20,
-  "itaipava":20,"guanabara":20,"manuel satiro":20,
-  // AIS 21
-  "caucaia":21,"icarai":21,"cumbuco":21,"jurema":21,"catuana":21,"bom principio":21,
-  // AIS 22
-  "maracanaú":22,"jereissati":22,"novo oriente":22,"santa maria":22,
-  "nova republica":22,"eusebio":22,"precabura":22,"coite":22,
-  "pacatuba":22,"itaitinga":22,
+  // AIS 1
+  "aldeota": 1,
+  "cais do porto": 1,
+  "meireles": 1,
+  "mucuripe": 1,
+  "praia de iracema": 1,
+  "varjota": 1,
+  "vicente pinzon": 1,
+
+  // AIS 2
+  "bom jardim": 2,
+  "conjunto ceara i": 2,
+  "conjunto ceara ii": 2,
+  "genibau": 2,
+  "granja lisboa": 2,
+  "granja portugal": 2,
+  "siqueira": 2,
+
+  // AIS 3
+  "ancuri": 3,
+  "barroso": 3,
+  "coacu": 3,
+  "conjunto palmeiras": 3,
+  "curio": 3,
+  "guajeru": 3,
+  "jangurussu": 3,
+  "lagoa redonda": 3,
+  "messejana": 3,
+  "parque santa maria": 3,
+  "paupina": 3,
+  "pedras": 3,
+  "sao bento": 3,
+
+  // AIS 4
+  "alvaro weyne": 4,
+  "carlito pamplona": 4,
+  "centro": 4,
+  "farias brito": 4,
+  "jacarecanga": 4,
+  "monte castelo": 4,
+  "moura brasil": 4,
+  "sao gerardo": 4,
+  "vila ellery": 4,
+
+  // AIS 5
+  "aeroporto": 5,
+  "benfica": 5,
+  "bom futuro": 5,
+  "couto fernandes": 5,
+  "damas": 5,
+  "democrito rocha": 5,
+  "dende": 5,
+  "fatima": 5,
+  "itaoca": 5,
+  "itaperi": 5,
+  "jardim america": 5,
+  "jose bonifacio": 5,
+  "montese": 5,
+  "panamericano": 5,
+  "parangaba": 5,
+  "parreao": 5,
+  "serrinha": 5,
+  "vila peri": 5,
+  "vila uniao": 5,
+
+  // AIS 6
+  "amadeu furtado": 6,
+  "antonio bezerra": 6,
+  "autran nunes": 6,
+  "bela vista": 6,
+  "bonsucesso": 6,
+  "dom lustosa": 6,
+  "henrique jorge": 6,
+  "joao xxiii": 6,
+  "joquei clube": 6,
+  "olavo oliveira": 6,
+  "padre andrade": 6,
+  "parque araxa": 6,
+  "parquelandia": 6,
+  "pici": 6,
+  "presidente kennedy": 6,
+  "quintino cunha": 6,
+  "rodolfo teofilo": 6,
+
+  // AIS 7
+  "aerolandia": 7,
+  "alto da balanca": 7,
+  "boa vista castelao": 7,
+  "cajazeiras": 7,
+  "cambeba": 7,
+  "cidade dos funcionarios": 7,
+  "dias macedo": 7,
+  "edson queiroz": 7,
+  "jardim das oliveiras": 7,
+  "jose de alencar": 7,
+  "parque dois irmaos": 7,
+  "parque iracema": 7,
+  "parque manibura": 7,
+  "passare": 7,
+  "sabiaguaba": 7,
+  "sapiranga": 7,
+  "coite": 7,
+
+  // AIS 8
+  "barra do ceara": 8,
+  "cristo redentor": 8,
+  "floresta": 8,
+  "jardim guanabara": 8,
+  "jardim iracema": 8,
+  "pirambu": 8,
+  "vila velha": 8,
+
+  // AIS 9
+  "aracape": 9,
+  "canindezinho": 9,
+  "conjunto esperanca": 9,
+  "jardim cearense": 9,
+  "manoel satiro": 9,
+  "maraponga": 9,
+  "mondubim": 9,
+  "novo mondubim": 9,
+  "parque presidente vargas": 9,
+  "parque santa rosa": 9,
+  "parque sao jose": 9,
+  "planalto ayrton senna": 9,
+  "prefeito jose walter": 9,
+
+  // AIS 10
+  "cidade 2000": 10,
+  "coco": 10,
+  "de lourdes": 10,
+  "dionisio torres": 10,
+  "engenheiro luciano cavalcante": 10,
+  "guararapes": 10,
+  "joaquim tavora": 10,
+  "manuel dias branco": 10,
+  "papicu": 10,
+  "praia do futuro i": 10,
+  "praia do futuro ii": 10,
+  "salinas": 10,
+  "tauape": 10
 };
 
 const ALL_BAIRROS = Object.keys(BAIRRO_AIS)
