@@ -21,4 +21,4 @@ node server.js
 ```
 
 ## Como acessar as respostas coletadas
-GET /api/respostas  → retorna JSON com todas as respostas
+Foi criado um caminho que ao adicionar '/admin' no final do URL do navegador, é aberto o espaço para acessar os dados coletados. 
